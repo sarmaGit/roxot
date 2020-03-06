@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Entity;
 
 class Player
@@ -48,8 +49,13 @@ class Player
 
     public function getPlayTime(): int
     {
-        if(!$this->outMinute) {
+        if (!$this->outMinute) {
             return 0;
+        }
+        //TODO
+        // исправление бага с подсчетом времени, футболисты играющие с начала матча неверно инициализировались
+        if ($this->inMinute === 1) {
+            $this->inMinute--;
         }
 
         return $this->outMinute - $this->inMinute;
@@ -57,6 +63,10 @@ class Player
 
     public function goToPlay(int $minute): void
     {
+        //TODO первая попытка исправить баг
+//        if ($minute === 1) {
+//            $this->inMinute = $minute - 1;
+//        }
         $this->inMinute = $minute;
         $this->playStatus = self::PLAY_PLAY_STATUS;
     }
