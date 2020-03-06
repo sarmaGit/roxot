@@ -4,12 +4,12 @@ namespace App\Entity;
 
 class Match
 {
-    public const INFO_MESSAGE_TYPE             = 'info';
+    public const INFO_MESSAGE_TYPE = 'info';
     public const DANGEROUS_MOMENT_MESSAGE_TYPE = 'dangerousMoment';
-    public const GOAL_MESSAGE_TYPE             = 'goal';
-    public const YELLOW_CARD_MESSAGE_TYPE      = 'yellowCard';
-    public const RED_CARD_MESSAGE_TYPE         = 'redCard';
-    public const REPLACE_PLAYER_MESSAGE_TYPE   = 'replacePlayer';
+    public const GOAL_MESSAGE_TYPE = 'goal';
+    public const YELLOW_CARD_MESSAGE_TYPE = 'yellowCard';
+    public const RED_CARD_MESSAGE_TYPE = 'redCard';
+    public const REPLACE_PLAYER_MESSAGE_TYPE = 'replacePlayer';
 
     private const MESSAGE_TYPES = [
         self::INFO_MESSAGE_TYPE,
@@ -27,6 +27,7 @@ class Match
     private Team $homeTeam;
     private Team $awayTeam;
     private array $messages;
+    private array $playTimePerPosition;
 
     public function __construct(string $id, \DateTime $date, string $tournament, Stadium $stadium, Team $homeTeam, Team $awayTeam)
     {
@@ -37,6 +38,20 @@ class Match
         $this->homeTeam = $homeTeam;
         $this->awayTeam = $awayTeam;
         $this->messages = [];
+        $this->playTimePerPosition = [
+            'homeTeam' => [
+                'offence' => 0,
+                'defence' => 0,
+                'semi_defence' => 0,
+                'goalkeeper' => 0
+            ],
+            'awayTeam' => [
+                'offence' => 0,
+                'defence' => 0,
+                'semi_defence' => 0,
+                'goalkeeper' => 0
+            ],
+        ];
     }
 
     public function getId(): string
@@ -74,14 +89,41 @@ class Match
         return $this->messages;
     }
 
+    public function getPlayTimePerPosition()
+    {
+        return $this->playTimePerPosition;
+    }
+
+    public function calcTotalPlayTimePerPosition(): void
+    {
+        $this->calcPlayTimePerSotion($this->homeTeam, 'homeTeam');
+        $this->calcPlayTimePerSotion($this->awayTeam, 'awayTeam');
+    }
+
+    public function calcPlayTimePerSotion(Team $team, string $typeTeam)
+    {
+        $players = $team->getPlayers();
+        foreach ($players as $player) {
+            if ($player->getPosition() === 'Н') {
+                $this->playTimePerPosition[$typeTeam]['offence'] += $player->getPlayTime();
+            } elseif ($player->getPosition() === 'З') {
+                $this->playTimePerPosition[$typeTeam]['defence'] += $player->getPlayTime();
+            } elseif ($player->getPosition() === 'П') {
+                $this->playTimePerPosition[$typeTeam]['semi_defence'] += $player->getPlayTime();
+            } elseif ($player->getPosition() === 'В') {
+                $this->playTimePerPosition[$typeTeam]['goalkeeper'] += $player->getPlayTime();
+            }
+        }
+    }
+
     public function addMessage(string $minute, string $text, string $type): void
     {
         $this->assertCorrectType($type);
 
         $this->messages[] = [
             'minute' => $minute,
-            'text'   => $text,
-            'type'   => $type,
+            'text' => $text,
+            'type' => $type,
         ];
     }
 

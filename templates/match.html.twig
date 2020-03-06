@@ -55,6 +55,43 @@
             </div>
 
             <div class="card">
+                <div class="card-header text-center">
+                    <div>
+                        <strong>Общее время по позициям</strong>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <table class="table table">
+                        <thead>
+                        <tr>
+                            <th>Команда</th>
+                            <th>Нападающие</th>
+                            <th>Защитники</th>
+                            <th>Полузащитники</th>
+                            <th>Вратари</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td>{{ match.homeTeam.name }}</td>
+                            <td>{{ match.playTimePerPosition.homeTeam.offence }}</td>
+                            <td>{{ match.playTimePerPosition.homeTeam.defence }}</td>
+                            <td>{{ match.playTimePerPosition.homeTeam.semi_defence }}</td>
+                            <td>{{ match.playTimePerPosition.homeTeam.goalkeeper }}</td>
+                        </tr>
+                        <tr>
+                            <td>{{ match.awayTeam.name }}</td>
+                            <td>{{ match.playTimePerPosition.awayTeam.offence }}</td>
+                            <td>{{ match.playTimePerPosition.awayTeam.defence }}</td>
+                            <td>{{ match.playTimePerPosition.awayTeam.semi_defence }}</td>
+                            <td>{{ match.playTimePerPosition.awayTeam.goalkeeper }}</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="card">
                 <div class="card-header">
                     Трансляция
                 </div>

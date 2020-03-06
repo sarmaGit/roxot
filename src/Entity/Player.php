@@ -15,11 +15,13 @@ class Player
     private int $goals;
     private int $yellowCards;
     private int $redCard;
+    private string $position;
 
     public function __construct(int $number, string $name, string $position)
     {
         $this->number = $number;
         $this->name = $name;
+        $this->position = $position;
         $this->playStatus = self::BENCH_PLAY_STATUS;
         $this->inMinute = 0;
         $this->outMinute = 0;
@@ -61,6 +63,11 @@ class Player
     public function getRedCard(): int
     {
         return $this->redCard;
+    }
+
+    public function getPosition(): string
+    {
+        return $this->position;
     }
 
     public function isPlay(): bool
