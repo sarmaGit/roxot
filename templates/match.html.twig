@@ -121,6 +121,11 @@
                         </td>
                         <td>
                             {{ player.name }}
+                            {% for i in 1..player.goals  %}
+                                {% if player.goals %}
+                                    <img src="https://www.soccer.ru/sites/all/themes/newtheme/images/events-icons/goal.png">
+                                {% endif %}
+                            {% endfor %}
                         </td>
                         <td>
                             {{ player.playTime }}’

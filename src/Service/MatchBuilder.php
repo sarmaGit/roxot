@@ -113,6 +113,8 @@ class MatchBuilder
                 case 'goal':
                     $team = $this->getTeamByName($match, $details['team']);
                     $team->addGoal();
+                    $player = $team->getPlayer($details['playerNumber']);
+                    $player->addGoal();
                     break;
 
             }
