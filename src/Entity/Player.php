@@ -13,8 +13,10 @@ class Player
     private int $inMinute;
     private int $outMinute;
     private int $goals;
+    private int $yellowCards;
+    private int $redCard;
 
-    public function __construct(int $number, string $name)
+    public function __construct(int $number, string $name, string $position)
     {
         $this->number = $number;
         $this->name = $name;
@@ -22,6 +24,8 @@ class Player
         $this->inMinute = 0;
         $this->outMinute = 0;
         $this->goals = 0;
+        $this->yellowCards = 0;
+        $this->redCard = 0;
     }
 
     public function getNumber(): int
@@ -44,8 +48,19 @@ class Player
         return $this->outMinute;
     }
 
-    public function getGoals(){
+    public function getGoals(): int
+    {
         return $this->goals;
+    }
+
+    public function getYellowCards(): int
+    {
+        return $this->yellowCards;
+    }
+
+    public function getRedCard(): int
+    {
+        return $this->redCard;
     }
 
     public function isPlay(): bool
@@ -58,8 +73,6 @@ class Player
         if (!$this->outMinute) {
             return 0;
         }
-        //TODO
-        // исправление бага с подсчетом времени, футболисты играющие с начала матча неверно инициализировались
         if ($this->inMinute === 1) {
             $this->inMinute--;
         }
@@ -69,10 +82,6 @@ class Player
 
     public function goToPlay(int $minute): void
     {
-        //TODO первая попытка исправить баг
-//        if ($minute === 1) {
-//            $this->inMinute = $minute - 1;
-//        }
         $this->inMinute = $minute;
         $this->playStatus = self::PLAY_PLAY_STATUS;
     }
@@ -83,7 +92,27 @@ class Player
         $this->playStatus = self::BENCH_PLAY_STATUS;
     }
 
-    public function addGoal(){
+    public function addGoal(): void
+    {
         $this->goals++;
+    }
+
+    public function addYellowCard(): void
+    {
+        if ($this->yellowCards === 1) {
+            $this->addRedCard();
+        } else {
+            $this->yellowCards++;
+        }
+    }
+
+    public function addRedCard(): void
+    {
+        $this->redCard++;
+        if ($this->redCard >= 2) {
+            throw new \Exception(
+                sprintf("Player can't have more than one red card, player %s have %d red cards", $this->name, $this->redCard)
+            );
+        }
     }
 }
